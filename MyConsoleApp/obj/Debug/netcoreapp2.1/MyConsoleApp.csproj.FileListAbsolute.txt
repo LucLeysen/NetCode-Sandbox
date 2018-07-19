@@ -1,0 +1,11 @@
+C:\code\NetCode-Sandbox\MyConsoleApp\bin\Debug\netcoreapp2.1\MyConsoleApp.deps.json
+C:\code\NetCode-Sandbox\MyConsoleApp\bin\Debug\netcoreapp2.1\MyConsoleApp.runtimeconfig.json
+C:\code\NetCode-Sandbox\MyConsoleApp\bin\Debug\netcoreapp2.1\MyConsoleApp.runtimeconfig.dev.json
+C:\code\NetCode-Sandbox\MyConsoleApp\bin\Debug\netcoreapp2.1\MyConsoleApp.dll
+C:\code\NetCode-Sandbox\MyConsoleApp\bin\Debug\netcoreapp2.1\MyConsoleApp.pdb
+C:\code\NetCode-Sandbox\MyConsoleApp\obj\Debug\netcoreapp2.1\MyConsoleApp.csprojAssemblyReference.cache
+C:\code\NetCode-Sandbox\MyConsoleApp\obj\Debug\netcoreapp2.1\MyConsoleApp.csproj.CoreCompileInputs.cache
+C:\code\NetCode-Sandbox\MyConsoleApp\obj\Debug\netcoreapp2.1\MyConsoleApp.AssemblyInfoInputs.cache
+C:\code\NetCode-Sandbox\MyConsoleApp\obj\Debug\netcoreapp2.1\MyConsoleApp.AssemblyInfo.cs
+C:\code\NetCode-Sandbox\MyConsoleApp\obj\Debug\netcoreapp2.1\MyConsoleApp.dll
+C:\code\NetCode-Sandbox\MyConsoleApp\obj\Debug\netcoreapp2.1\MyConsoleApp.pdb
