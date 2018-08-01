@@ -1,6 +1,10 @@
 @page
+@using Microsoft.Extensions.Configuration
+@inject IConfiguration Configuration
 
 <h1>Hi Luke</h1>
 
 <p>This page is at /Lukes </p>
 <b>The time is @DateTime.Now</b>
+
+<h2>@Configuration["Message"]</h2>
