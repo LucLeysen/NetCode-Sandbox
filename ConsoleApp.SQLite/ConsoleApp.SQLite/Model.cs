@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
 namespace ConsoleApp.SQLite
@@ -16,10 +19,31 @@ namespace ConsoleApp.SQLite
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<AuditEntry>();
+            modelBuilder.Ignore<AuditEntry>();
+
+            modelBuilder.Entity<RssBlog>()
+                .HasBaseType<Blog>();
+
             modelBuilder.Entity<Blog>()
-                .Property(b => b.Url)
-                .IsRequired();
+                .HasIndex(b => b.Url)
+                .IsUnique();
+
+            modelBuilder.Entity<Blog>()
+                .Property(b => b.Inserted)
+                .ValueGeneratedOnAdd();
+
+            modelBuilder.Entity<Blog>()
+                .Property(b => b.LastUpdated)
+                .ValueGeneratedOnAddOrUpdate();
         }
+    }
+
+    public class AuditEntry
+    {
+        public int AuditEntryId { get; set; }
+        public string UserName { get; set; }
+        public string Action { get; set; }
     }
 
     public class Post
@@ -30,8 +54,6 @@ namespace ConsoleApp.SQLite
 
         public string Content { get; set; }
 
-        public int BlogId { get; set; }
-
         public Blog Blog { get; set; }
     }
 
@@ -39,8 +61,19 @@ namespace ConsoleApp.SQLite
     {
         public int BlogId { get; set; }
 
+        [Required]
+        [MaxLength(500)]
         public string Url { get; set; }
+        
+        public DateTime Inserted { get; set; }
 
+        public DateTime LastUpdated { get; set; }
+        
         public List<Post> Posts { get; set; }
+    }
+
+    public class RssBlog : Blog
+    {
+        public string RssUrl { get; set; }
     }
 }

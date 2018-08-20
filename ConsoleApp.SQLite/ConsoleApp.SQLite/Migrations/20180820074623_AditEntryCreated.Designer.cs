@@ -4,14 +4,16 @@ using ConsoleApp.SQLite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace ConsoleApp.SQLite.Migrations
 {
     [DbContext(typeof(BloggingContext))]
-    partial class BloggingContextModelSnapshot : ModelSnapshot
+    [Migration("20180820074623_AditEntryCreated")]
+    partial class AditEntryCreated
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -19,33 +21,33 @@ namespace ConsoleApp.SQLite.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+            modelBuilder.Entity("ConsoleApp.SQLite.AuditEntry", b =>
+                {
+                    b.Property<int>("AuditEntryId")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Action");
+
+                    b.Property<string>("UserName");
+
+                    b.HasKey("AuditEntryId");
+
+                    b.ToTable("AuditEntry");
+                });
+
             modelBuilder.Entity("ConsoleApp.SQLite.Blog", b =>
                 {
                     b.Property<int>("BlogId")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Discriminator")
-                        .IsRequired();
-
-                    b.Property<DateTime>("Inserted")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<DateTime>("LastUpdated")
-                        .ValueGeneratedOnAddOrUpdate();
-
                     b.Property<string>("Url")
-                        .IsRequired()
-                        .HasMaxLength(500);
+                        .IsRequired();
 
                     b.HasKey("BlogId");
 
-                    b.HasIndex("Url")
-                        .IsUnique();
-
                     b.ToTable("Blogs");
-
-                    b.HasDiscriminator<string>("Discriminator").HasValue("Blog");
                 });
 
             modelBuilder.Entity("ConsoleApp.SQLite.Post", b =>
@@ -65,17 +67,6 @@ namespace ConsoleApp.SQLite.Migrations
                     b.HasIndex("BlogId");
 
                     b.ToTable("Posts");
-                });
-
-            modelBuilder.Entity("ConsoleApp.SQLite.RssBlog", b =>
-                {
-                    b.HasBaseType("ConsoleApp.SQLite.Blog");
-
-                    b.Property<string>("RssUrl");
-
-                    b.ToTable("RssBlog");
-
-                    b.HasDiscriminator().HasValue("RssBlog");
                 });
 
             modelBuilder.Entity("ConsoleApp.SQLite.Post", b =>

@@ -4,14 +4,16 @@ using ConsoleApp.SQLite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace ConsoleApp.SQLite.Migrations
 {
     [DbContext(typeof(BloggingContext))]
-    partial class BloggingContextModelSnapshot : ModelSnapshot
+    [Migration("20180820080354_GenerateValues")]
+    partial class GenerateValues
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -25,27 +27,35 @@ namespace ConsoleApp.SQLite.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Discriminator")
-                        .IsRequired();
-
                     b.Property<DateTime>("Inserted")
                         .ValueGeneratedOnAdd();
 
                     b.Property<DateTime>("LastUpdated")
                         .ValueGeneratedOnAddOrUpdate();
 
+                    b.Property<int?>("TypeBlogMetaDataId");
+
                     b.Property<string>("Url")
-                        .IsRequired()
-                        .HasMaxLength(500);
+                        .IsRequired();
 
                     b.HasKey("BlogId");
 
-                    b.HasIndex("Url")
-                        .IsUnique();
+                    b.HasIndex("TypeBlogMetaDataId");
 
                     b.ToTable("Blogs");
+                });
 
-                    b.HasDiscriminator<string>("Discriminator").HasValue("Blog");
+            modelBuilder.Entity("ConsoleApp.SQLite.BlogMetaData", b =>
+                {
+                    b.Property<int>("BlogMetaDataId")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("LoadedFromDatabase");
+
+                    b.HasKey("BlogMetaDataId");
+
+                    b.ToTable("BlogMetaData");
                 });
 
             modelBuilder.Entity("ConsoleApp.SQLite.Post", b =>
@@ -67,15 +77,11 @@ namespace ConsoleApp.SQLite.Migrations
                     b.ToTable("Posts");
                 });
 
-            modelBuilder.Entity("ConsoleApp.SQLite.RssBlog", b =>
+            modelBuilder.Entity("ConsoleApp.SQLite.Blog", b =>
                 {
-                    b.HasBaseType("ConsoleApp.SQLite.Blog");
-
-                    b.Property<string>("RssUrl");
-
-                    b.ToTable("RssBlog");
-
-                    b.HasDiscriminator().HasValue("RssBlog");
+                    b.HasOne("ConsoleApp.SQLite.BlogMetaData", "Type")
+                        .WithMany()
+                        .HasForeignKey("TypeBlogMetaDataId");
                 });
 
             modelBuilder.Entity("ConsoleApp.SQLite.Post", b =>
