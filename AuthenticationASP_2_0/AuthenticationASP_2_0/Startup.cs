@@ -1,16 +1,11 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using AuthenticationASP_2_0.Data;
+using AuthenticationASP_2_0.Services;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using AuthenticationASP_2_0.Data;
-using AuthenticationASP_2_0.Services;
 
 namespace AuthenticationASP_2_0
 {
@@ -21,10 +16,7 @@ namespace AuthenticationASP_2_0
             Configuration = configuration;
         }
 
-        public IConfiguration Configuration
-        {
-            get;
-        }
+        public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -36,11 +28,17 @@ namespace AuthenticationASP_2_0
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
-            services.AddAuthentication().AddMicrosoftAccount(microsoftOptions =>
-            {
-                microsoftOptions.ClientId = Configuration["Authentication:Microsoft:ApplicationId"];
-                microsoftOptions.ClientSecret = Configuration["Authentication:Microsoft:Password"];
-            });
+            services.AddAuthentication()
+                .AddMicrosoftAccount(microsoftOptions =>
+                {
+                    microsoftOptions.ClientId = Configuration["Authentication:Microsoft:ApplicationId"];
+                    microsoftOptions.ClientSecret = Configuration["Authentication:Microsoft:Password"];
+                })
+                .AddFacebook(facebookOptions =>
+                {
+                    facebookOptions.AppId = Configuration["Authentication:Facebook:AppId"];
+                    facebookOptions.AppSecret = Configuration["Authentication:Facebook:AppSecret"];
+                });
 
             services.AddMvc()
                 .AddRazorPagesOptions(options =>
