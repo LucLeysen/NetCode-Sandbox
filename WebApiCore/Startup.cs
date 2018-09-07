@@ -26,7 +26,7 @@ namespace WebApiCore
             {
                 s.SwaggerDoc("v1", new Info
                 {
-                    Title = "Cocert API",
+                    Title = "Concert API",
                     Version = "v1"
                 });
             });
