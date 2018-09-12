@@ -40,26 +40,34 @@ namespace AdvancedMiddleware
                 app.UseExceptionHandler("/Error");
             }
 
-            app.Use(async (context, next) =>
-            {
-                var timer = Stopwatch.StartNew();
+            //app.Use(async (context, next) =>
+            //{
+            //    var timer = Stopwatch.StartNew();
 
-                logger.LogInformation($"==> beginning request in {env.ApplicationName}");
-                await next();
+            //    logger.LogInformation($"==> beginning request in {env.ApplicationName}");
+            //    await next();
 
-                logger.LogInformation($" ==> completed request {timer.ElapsedMilliseconds} ms");
-            });
+            //    logger.LogInformation($" ==> completed request {timer.ElapsedMilliseconds} ms");
+            //});
+            app.UseEnvironmentMiddleware();
 
             app.Map("/contacts",
                 a => a.Run(async context => { await context.Response.WriteAsync("Here are youre contacts"); }));
 
+            app.MapWhen(context => context.Request.Headers["User-Agent"].First().Contains("Chrome"), ChromeRoute);
 
             app.UseStaticFiles();
 
-            app.Run(async (context) =>{
+            app.Run(async (context) =>
+            {
                 context.Response.ContentType = "text/html";
                 await context.Response.WriteAsync("Hello world");
             });
+        }
+
+        private void ChromeRoute(IApplicationBuilder app)
+        {
+            app.Run(async context => { await context.Response.WriteAsync("Hello Chrome"); });
         }
     }
 }
